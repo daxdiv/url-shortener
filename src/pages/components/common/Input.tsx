@@ -1,9 +1,10 @@
-import Link from "next/link";
 import Button from "./Button";
 import { useState } from "react";
 import { trpc } from "../../../utils/trpc";
 import { env } from "../../../env/client.mjs";
-
+import { BiCopy } from "react-icons/bi";
+import { IoOpenOutline } from "react-icons/io5";
+import { copyToClipboard } from "../../../utils/copyToClipboard";
 interface IShortenedUrls {
   shortenUrl: string;
   aliasOf: string;
@@ -52,16 +53,29 @@ const Input = () => {
 
       <ul className="mt-4 items-center justify-center font-normal">
         {shortenedUrls.map(({ shortenUrl, aliasOf }) => (
-          <li key={`${Math.random()}-${shortenUrl}`}>
-            <Link
-              href={aliasOf}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-blue-600"
-            >
-              {env.NEXT_PUBLIC_BASE_URL}/{shortenUrl}
-            </Link>
-            <span> - alias of {aliasOf}</span>
+          <li
+            key={`${Math.random()}-${shortenUrl}`}
+            className="flex items-center justify-center"
+          >
+            {env.NEXT_PUBLIC_BASE_URL.replace("http://", "")}/
+            {shortenUrl}
+            <BiCopy
+              className="ml-4 mr-2 cursor-pointer hover:text-blue-600"
+              onClick={() => {
+                copyToClipboard(
+                  `${env.NEXT_PUBLIC_BASE_URL}/${shortenUrl}`
+                );
+              }}
+            />
+            <IoOpenOutline
+              className="mr-2 cursor-pointer hover:text-blue-600"
+              onClick={() => {
+                window.open(
+                  `${env.NEXT_PUBLIC_BASE_URL}/${shortenUrl}`
+                );
+              }}
+            />
+            <span> ({aliasOf})</span>
           </li>
         ))}
       </ul>
