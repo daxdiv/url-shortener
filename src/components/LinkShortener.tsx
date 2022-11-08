@@ -1,10 +1,10 @@
-import Button from "./Button";
+import Button from "./common/Button";
 import { useState } from "react";
-import { trpc } from "../../../utils/trpc";
-import { env } from "../../../env/client.mjs";
+import { trpc } from "../utils/trpc";
+import { env } from "../env/client.mjs";
 import { BiCopy } from "react-icons/bi";
 import { IoOpenOutline } from "react-icons/io5";
-import { copyToClipboard } from "../../../utils/copyToClipboard";
+import { copyToClipboard } from "../utils/copyToClipboard";
 interface IShortenedUrls {
   shortenUrl: string;
   aliasOf: string;
@@ -57,22 +57,17 @@ const Input = () => {
             key={`${Math.random()}-${shortenUrl}`}
             className="flex items-center justify-center"
           >
-            {env.NEXT_PUBLIC_BASE_URL.replace("http://", "")}/
-            {shortenUrl}
+            {env.NEXT_PUBLIC_BASE_URL.replace("http://", "")}/{shortenUrl}
             <BiCopy
               className="ml-4 mr-2 cursor-pointer hover:text-blue-600"
               onClick={() => {
-                copyToClipboard(
-                  `${env.NEXT_PUBLIC_BASE_URL}/${shortenUrl}`
-                );
+                copyToClipboard(`${env.NEXT_PUBLIC_BASE_URL}/${shortenUrl}`);
               }}
             />
             <IoOpenOutline
               className="mr-2 cursor-pointer hover:text-blue-600"
               onClick={() => {
-                window.open(
-                  `${env.NEXT_PUBLIC_BASE_URL}/${shortenUrl}`
-                );
+                window.open(`${env.NEXT_PUBLIC_BASE_URL}/${shortenUrl}`);
               }}
             />
             <span> ({aliasOf})</span>
