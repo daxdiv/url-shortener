@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import CenteredContainer from "../components/common/CenteredContainer";
-import Input from "../components/LinkShortener";
+import LinkShortener from "../components/LinkShortener";
 
 const Home: NextPage = () => {
   return (
@@ -12,7 +12,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <CenteredContainer>
-        <Input />
+        <LinkShortener />
       </CenteredContainer>
     </>
   );
