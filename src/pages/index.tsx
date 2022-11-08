@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import CenteredContainer from "./components/common/CenteredContainer";
-import Input from "./components/common/Input";
+import CenteredContainer from "../components/common/CenteredContainer";
+import Input from "../components/LinkShortener";
 
 const Home: NextPage = () => {
   return (
