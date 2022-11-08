@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../server/db/client";
+import { StatusCodes as HTTPStatusCodes } from "http-status-codes";
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,7 +9,7 @@ export default async function handler(
   const shortenUrl = req.query.url;
 
   if (!shortenUrl || typeof shortenUrl !== "string") {
-    res.status(400).json({ error: "Invalid URL" });
+    res.status(HTTPStatusCodes.BAD_REQUEST).json({ error: "Invalid URL" });
 
     return;
   }
@@ -23,7 +24,7 @@ export default async function handler(
   });
 
   if (!url) {
-    res.status(404).json({ error: "URL not found" });
+    res.status(HTTPStatusCodes.NOT_FOUND).json({ error: "URL not found" });
 
     return;
   }
