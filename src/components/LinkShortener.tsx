@@ -4,7 +4,7 @@ import { trpc } from "../utils/trpc";
 import { env } from "../env/client.mjs";
 import { BiCopy } from "react-icons/bi";
 import { IoOpenOutline } from "react-icons/io5";
-import { copyToClipboard } from "../utils/copyToClipboard";
+import { copyToClipboard, isValidUrl } from "../utils/helpers";
 
 interface IShortenedUrls {
   shortenUrl: string;
@@ -14,12 +14,19 @@ interface IShortenedUrls {
 const LinkShortener = () => {
   const [url, setUrl] = useState("");
   const [shortenedUrls, setShortenedUrls] = useState<IShortenedUrls[]>([]);
+  const [error, setError] = useState(false);
   const shortenUrlMutation = trpc.url.shorten.useMutation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (url === "") return;
+    if (!isValidUrl(url)) {
+      setUrl("");
+      setError(true);
+
+      return;
+    }
 
     shortenUrlMutation.mutate(
       { url },
@@ -29,6 +36,7 @@ const LinkShortener = () => {
 
           setShortenedUrls((prev) => [...prev, { shortenUrl, aliasOf }]);
           setUrl("");
+          setError(false);
         },
       }
     );
@@ -40,11 +48,21 @@ const LinkShortener = () => {
         className="relative flex flex-col items-center justify-center"
         onSubmit={handleSubmit}
       >
-        <div>
+        <div className="relative">
+          <p
+            className={`absolute top-[-1.5rem] left-0 text-sm font-normal text-red-600 ${
+              error ? "block animate-shaking" : "hidden"
+            }`}
+          >
+            Please insert a valid or absolute URL
+          </p>
           <input
             type="text"
             placeholder="Your URL goes here"
-            className="mr-2 h-12 w-96 rounded-lg bg-gray-700 px-4 text-lg font-normal focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className={`mr-4 h-12 w-96 rounded-lg bg-gray-700 px-4 text-lg font-normal focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+              error &&
+              "animate-shaking ring-2 ring-red-600 placeholder:text-red-600 focus:ring-2 focus:ring-red-600"
+            }`}
             value={url}
             onChange={(e) => {
               setUrl(e.target.value);
@@ -100,13 +118,6 @@ const LinkShortener = () => {
               </div>
             </Fragment>
           ))}
-
-          {/* <div className="border-r border-r-white">
-            <p>Shorten URL</p>
-          </div>
-          <div>
-            <p>Alias of</p>
-          </div> */}
         </div>
       )}
     </div>
