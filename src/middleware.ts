@@ -9,6 +9,9 @@ export async function middleware(req: NextRequest) {
   if (res.status === HTTPStatusCodes.BAD_REQUEST) {
     return NextResponse.redirect(req.nextUrl.origin);
   }
+  if (res.status === HTTPStatusCodes.NOT_FOUND) {
+    return NextResponse.redirect(req.nextUrl.origin);
+  }
 
   const data = await res.json();
 
@@ -19,5 +22,5 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   // NOTE: this doesn't match useless stuff like /favicon.ico
-  matcher: "/((?!api|_next/static|favicon.ico).*)",
+  matcher: "/((?!api|_next/static|favicon.ico|[0-9][0-9][0-9]).*)",
 };
