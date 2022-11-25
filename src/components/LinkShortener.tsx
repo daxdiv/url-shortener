@@ -74,23 +74,23 @@ const LinkShortener = () => {
 
       {shortenedUrls.length > 0 && (
         <div
-          className="mt-6 grid w-full grid-cols-2 overflow-hidden rounded-lg border border-gray-200 text-center font-normal"
+          className="mt-6 grid w-full grid-cols-2 overflow-hidden rounded-lg border-gray-200 text-center font-normal"
           style={{
             gridTemplateRows: `repeat(${shortenedUrls.length}, minmax(0, 1fr))`,
           }}
         >
-          <div className="border-r border-b border-b-white border-r-white bg-gray-700 py-2 text-white">
+          <div className=" border-b-white border-r-white bg-gray-700 py-2 text-white">
             Shorten URL
           </div>
-          <div className="border-b border-b-white bg-gray-700 py-2 text-white">
+          <div className=" border-b-white bg-gray-700 py-2 text-white">
             Alias of
           </div>
 
           {shortenedUrls.map(({ shortenUrl, aliasOf }, i) => (
             <Fragment key={`${Math.random()}-${shortenUrl}`}>
               <div
-                className={`flex items-center justify-between border-r border-r-white p-2 font-thin ${
-                  i % 2 !== 0 ? "bg-gray-900" : ""
+                className={`flex items-center justify-between  border-r-white p-2 font-thin ${
+                  i % 2 !== 0 ? "bg-gray-700" : ""
                 }`}
               >
                 {env.NEXT_PUBLIC_BASE_URL.replace("http://", "")}/{shortenUrl}
@@ -112,7 +112,7 @@ const LinkShortener = () => {
                 </div>
               </div>
               <div
-                className={`p-2 font-thin ${i % 2 !== 0 ? "bg-gray-900" : ""}`}
+                className={`p-2 font-thin ${i % 2 !== 0 ? "bg-gray-700" : ""}`}
               >
                 {aliasOf}
               </div>
