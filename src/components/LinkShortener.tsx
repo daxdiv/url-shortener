@@ -79,10 +79,10 @@ const LinkShortener = () => {
             gridTemplateRows: `repeat(${shortenedUrls.length}, minmax(0, 1fr))`,
           }}
         >
-          <div className=" border-b-white border-r-white bg-gray-700 py-2 text-white">
+          <div className="border-b-white border-r-white bg-gray-700 py-2 text-white">
             Shorten URL
           </div>
-          <div className=" border-b-white bg-gray-700 py-2 text-white">
+          <div className="border-b-white bg-gray-700 py-2 text-white">
             Alias of
           </div>
 
