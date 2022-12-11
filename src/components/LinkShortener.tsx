@@ -21,8 +21,7 @@ const LinkShortener = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (url === "") return;
-    if (!isValidUrl(url)) {
+    if (url === "" || !isValidUrl(url)) {
       setUrl("");
       setError(true);
 
