@@ -1,14 +1,13 @@
 interface IButtonProps {
   text: string;
   type: "submit" | "reset" | "button" | undefined;
+  className?: string;
+  onClick?: () => void;
 }
 
-const Button = ({ text, type }: IButtonProps) => {
+const Button = ({ text, type, className = "", onClick }: IButtonProps) => {
   return (
-    <button
-      type={type}
-      className="h-12 w-24 rounded-lg bg-blue-600 text-lg font-normal text-white transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600"
-    >
+    <button type={type} className={className} onClick={onClick}>
       {text}
     </button>
   );
