@@ -1,9 +1,13 @@
 import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import CenteredContainer from "../components/common/CenteredContainer";
+import Dialog from "../components/common/Dialog";
 import LinkShortener from "../components/LinkShortener";
 
 const Home: NextPage = () => {
+  const { data: session } = useSession();
+
   return (
     <>
       <Head>
@@ -13,6 +17,8 @@ const Home: NextPage = () => {
       </Head>
       <CenteredContainer>
         <LinkShortener />
+
+        {session && <Dialog text="You are logged in" variant="info" />}
       </CenteredContainer>
     </>
   );
