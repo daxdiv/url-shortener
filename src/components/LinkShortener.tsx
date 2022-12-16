@@ -4,6 +4,7 @@ import { trpc } from "../utils/trpc";
 import { isValidUrl } from "../utils/helpers";
 import Header from "./common/Header";
 import Urls from "./Urls";
+import Dialog from "./common/Dialog";
 
 export interface IShortenedUrls {
   shortenUrl: string;
@@ -11,6 +12,7 @@ export interface IShortenedUrls {
 }
 
 const LinkShortener = () => {
+  const [success, setSuccess] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [shortenedUrls, setShortenedUrls] = useState<IShortenedUrls[]>([]);
@@ -28,17 +30,29 @@ const LinkShortener = () => {
 
     shortenUrlMutation.mutate(
       { url },
+
+      // TODO: convert all states to useReducer
       {
         onSuccess: ({ shortenUrl, aliasOf }) => {
           console.log(`created ${shortenUrl} - alias of ${aliasOf}`);
 
           setShortenedUrls((prev) => [...prev, { shortenUrl, aliasOf }]);
+          setSuccess(true);
           setUrl("");
           setError("");
+
+          setTimeout(() => {
+            setSuccess(false);
+          }, 2200);
         },
         onError: () => {
+          setSuccess(false);
           setUrl("");
           setError("An error occurred, please try again");
+
+          setTimeout(() => {
+            setError("");
+          }, 2200);
         },
       }
     );
@@ -53,13 +67,13 @@ const LinkShortener = () => {
           onSubmit={handleSubmit}
         >
           <div className="relative">
-            <p
+            {/* <p
               className={`absolute top-[-1.5rem] left-0 text-sm font-normal text-red-600 ${
                 error ? "block animate-shaking" : "hidden"
               }`}
             >
               {error}
-            </p>
+            </p> */}
             <input
               type="text"
               placeholder="Your URL goes here"
@@ -81,6 +95,11 @@ const LinkShortener = () => {
         </form>
 
         <Urls data={shortenedUrls} />
+
+        {error !== "" && <Dialog text={error} variant="error" />}
+        {success && (
+          <Dialog text="Successfully shortened URL" variant="success" />
+        )}
       </div>
     </>
   );
