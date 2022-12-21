@@ -4,52 +4,102 @@ import Header from "./common/Header";
 import Urls from "./Urls";
 import { isValidUrl } from "../utils/helpers";
 import { trpc } from "../utils/trpc";
-import { useState } from "react";
+import { useReducer } from "react";
 
 export interface IShortenedUrls {
   shortenUrl: string;
   aliasOf: string;
 }
+interface IState {
+  url: string;
+  error: string;
+  success: boolean;
+  shortenedUrls: IShortenedUrls[];
+}
+type TAction =
+  | { type: "typing-url"; payload: string }
+  | { type: "set-error"; payload: string }
+  | { type: "set-success"; payload: boolean }
+  | { type: "add-shortened-url"; payload: IShortenedUrls };
+
+const reducer = (state: IState, action: TAction) => {
+  switch (action.type) {
+    case "typing-url":
+      return {
+        ...state,
+        url: action.payload,
+      };
+    case "set-error":
+      return {
+        ...state,
+        success: false,
+        url: "",
+        error: action.payload,
+      };
+    case "set-success":
+      return {
+        ...state,
+        success: action.payload,
+      };
+    case "add-shortened-url":
+      return {
+        ...state,
+        success: true,
+        url: "",
+        error: "",
+        shortenedUrls: [...state.shortenedUrls, action.payload],
+      };
+    default:
+      return state;
+  }
+};
 
 const UrlShortener = () => {
-  const [success, setSuccess] = useState(false);
-  const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
-  const [shortenedUrls, setShortenedUrls] = useState<IShortenedUrls[]>([]);
+  const [state, dispatch] = useReducer(reducer, {
+    url: "",
+    error: "",
+    success: false,
+    shortenedUrls: [],
+  });
   const shortenUrlMutation = trpc.url.shorten.useMutation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (url === "" || !isValidUrl(url)) {
-      setUrl("");
-      setError("Please insert a valid or absolute URL");
+    if (state.url === "" || !isValidUrl(state.url)) {
+      dispatch({
+        type: "set-error",
+        payload: "Please insert a valid or absolute URL",
+      });
 
       return;
     }
 
     shortenUrlMutation.mutate(
-      { url },
-
-      // TODO: convert all states to useReducer
+      { url: state.url },
       {
         onSuccess: async ({ shortenUrl, aliasOf }) => {
-          setShortenedUrls((prev) => [...prev, { shortenUrl, aliasOf }]);
-          setSuccess(true);
-          setUrl("");
-          setError("");
-
+          dispatch({
+            type: "add-shortened-url",
+            payload: { shortenUrl, aliasOf },
+          });
           setTimeout(() => {
-            setSuccess(false);
+            dispatch({
+              type: "set-success",
+              payload: false,
+            });
           }, 2200);
         },
         onError: () => {
-          setSuccess(false);
-          setUrl("");
-          setError("An error occurred, please try again");
-
+          dispatch({
+            type: "set-error",
+            payload: "An error occurred, please try again",
+          });
           setTimeout(() => {
-            setError("");
+            dispatch({
+              type: "set-error",
+              payload: "",
+            });
           }, 2200);
         },
       }
@@ -76,12 +126,15 @@ const UrlShortener = () => {
               type="text"
               placeholder="Your URL goes here"
               className={`mr-4 h-12 w-96 rounded-lg bg-gray-700 px-4 text-lg font-normal focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                error &&
+                state.error &&
                 "animate-shaking ring-2 ring-red-600 placeholder:text-red-600 focus:ring-2 focus:ring-red-600"
               }`}
-              value={url}
+              value={state.url}
               onChange={(e) => {
-                setUrl(e.target.value);
+                dispatch({
+                  type: "typing-url",
+                  payload: e.target.value,
+                });
               }}
             />
             <Button
@@ -94,10 +147,10 @@ const UrlShortener = () => {
           </div>
         </form>
 
-        <Urls data={shortenedUrls} />
+        <Urls data={state.shortenedUrls} />
 
-        {error !== "" && <Dialog text={error} variant="error" />}
-        {success && (
+        {state.error !== "" && <Dialog text={state.error} variant="error" />}
+        {state.success && (
           <Dialog text="Successfully shortened URL" variant="success" />
         )}
       </div>
