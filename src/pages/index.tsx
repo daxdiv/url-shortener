@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import CenteredContainer from "../components/common/CenteredContainer";
 import Dialog from "../components/common/Dialog";
-import LinkShortener from "../components/LinkShortener";
+import UrlShortener from "../components/UrlShortener";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <CenteredContainer>
-        <LinkShortener />
+        <UrlShortener />
 
         {session && <Dialog text="You are logged in" variant="info" />}
       </CenteredContainer>
