@@ -11,7 +11,7 @@ export interface IShortenedUrls {
   aliasOf: string;
 }
 
-const LinkShortener = () => {
+const UrlShortener = () => {
   const [success, setSuccess] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
@@ -33,7 +33,7 @@ const LinkShortener = () => {
 
       // TODO: convert all states to useReducer
       {
-        onSuccess: ({ shortenUrl, aliasOf }) => {
+        onSuccess: async ({ shortenUrl, aliasOf }) => {
           setShortenedUrls((prev) => [...prev, { shortenUrl, aliasOf }]);
           setSuccess(true);
           setUrl("");
@@ -105,4 +105,4 @@ const LinkShortener = () => {
   );
 };
 
-export default LinkShortener;
+export default UrlShortener;

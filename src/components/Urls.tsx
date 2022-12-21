@@ -1,6 +1,6 @@
 import { BiCopy } from "react-icons/bi";
 import { Fragment } from "react";
-import type { IShortenedUrls } from "./LinkShortener.jsx";
+import type { IShortenedUrls } from "./UrlShortener.jsx";
 import { IoOpenOutline } from "react-icons/io5";
 import { copyToClipboard } from "../utils/helpers";
 import { env } from "../env/client.mjs";
