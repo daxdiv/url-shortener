@@ -1,10 +1,10 @@
 import Button from "./common/Button";
-import { useState } from "react";
-import { trpc } from "../utils/trpc";
-import { isValidUrl } from "../utils/helpers";
+import Dialog from "./common/Dialog";
 import Header from "./common/Header";
 import Urls from "./Urls";
-import Dialog from "./common/Dialog";
+import { isValidUrl } from "../utils/helpers";
+import { trpc } from "../utils/trpc";
+import { useState } from "react";
 
 export interface IShortenedUrls {
   shortenUrl: string;
@@ -34,8 +34,6 @@ const LinkShortener = () => {
       // TODO: convert all states to useReducer
       {
         onSuccess: ({ shortenUrl, aliasOf }) => {
-          console.log(`created ${shortenUrl} - alias of ${aliasOf}`);
-
           setShortenedUrls((prev) => [...prev, { shortenUrl, aliasOf }]);
           setSuccess(true);
           setUrl("");
@@ -87,9 +85,11 @@ const LinkShortener = () => {
               }}
             />
             <Button
-              text="Shorten"
+              text={shortenUrlMutation.isLoading ? "Loading..." : "Shorten"}
               type="submit"
-              className="h-12 w-24 rounded-lg bg-blue-600 text-lg font-bold text-white transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className={`h-12 w-24 rounded-lg ${
+                shortenUrlMutation.isLoading ? "bg-blue-500" : "bg-blue-600"
+              } text-lg font-bold text-white transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600`}
             />
           </div>
         </form>
