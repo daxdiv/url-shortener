@@ -18,11 +18,21 @@ module.exports = {
           "0%": { opacity: 1, transform: "scale(1)" },
           "100%": { opacity: 0, transform: "scale(0.9)" },
         },
+        grow: {
+          "0%": { transform: "translateX(100%) scaleX(0)" },
+          "100%": { transform: "translateX(0) scaleX(1)" },
+        },
+        shrink: {
+          "0%": { transform: "translateX(0) scaleX(1)" },
+          "100%": { transform: "translateX(100%) scaleX(0)" },
+        },
       },
       animation: {
         shaking: "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
         "dialog-in": "dialog-in 0.3s ease-out forwards",
         "dialog-out": "dialog-out 0.3s ease-out forwards",
+        grow: "grow 0.4s forwards",
+        shrink: "shrink 0.4s forwards",
       },
     },
   },

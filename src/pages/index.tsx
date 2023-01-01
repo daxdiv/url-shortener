@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         {session && <Dialog text="You are logged in" variant="info" />}
       </CenteredContainer>
 
-      {open && <SidePanel />}
+      <SidePanel open={open} />
     </>
   );
 };
