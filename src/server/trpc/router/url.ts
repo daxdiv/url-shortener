@@ -41,4 +41,15 @@ export const urlRouter = router({
       },
     });
   }),
+  deleteByUserId: protectedProcedure
+    .input(z.object({ urlId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { urlId } = input;
+
+      await ctx.prisma.url.delete({
+        where: {
+          id: urlId,
+        },
+      });
+    }),
 });

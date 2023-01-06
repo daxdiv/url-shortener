@@ -16,9 +16,13 @@ const SidePanel = ({ open }: { open: boolean }) => {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
   });
+  const deleteUrlMutation = trpc.url.deleteByUserId.useMutation();
 
-  const handleDelete = () => {
-    // TODO
+  const handleDelete = async (urlId: string) => {
+    await deleteUrlMutation.mutateAsync(
+      { urlId },
+      { onSuccess: () => refetch() }
+    );
   };
 
   return (
@@ -50,9 +54,10 @@ const SidePanel = ({ open }: { open: boolean }) => {
         </div>
       </div>
 
+      {isLoading && <p className="mx-2 mt-6 text-sm text-white">Loading...</p>}
       {error && (
         <p className="mx-2 mt-6 text-sm text-white">
-          You must be logged in to see your recent activities
+          You have to be logged in to see your recent activities
         </p>
       )}
       {urls && urls.length === 0 && (
@@ -70,7 +75,7 @@ const SidePanel = ({ open }: { open: boolean }) => {
                   <FiTrash2
                     className="cursor-pointer text-red-600 transition-transform hover:scale-[1.15]"
                     size={18}
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(u.id)}
                   />
                 </label>
                 <div className="mx-2 mt-4 flex w-12 flex-col" id={`url-${i}`}>
